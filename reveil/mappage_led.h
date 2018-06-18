@@ -2,9 +2,8 @@
 
 struct pixel_position
 {
-  int x;
-  int y;
-  
+  uint16_t x;
+  uint16_t y;
 };
 
 struct pixel_color

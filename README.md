@@ -12,3 +12,6 @@ The Led Matrix is made by using pannel of 8\*8 WS2812 led. The code can be adapt
 TODO:
 -change the code to drive more than 256 LEDs
 -add luminosity settings
+-add PIR sensor for sleep mode while nobody's here
+-add support for bitmap image (logo, image, animation,....)
+-clean code

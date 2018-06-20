@@ -25,8 +25,8 @@
 // How many NeoPixels are attached to the Arduino?
 #define NUMPIXELS      257
 
-char ssid[] = "";  //  your network SSID (name)
-char pass[] = "";       // your network password
+char ssid[] = "Livebox-A110";  //  your network SSID (name)
+char pass[] = "mqEy5mX7j2WCGsZuJf";       // your network password
 
 unsigned int localPort = 2390;      // local port to listen for UDP packets
 IPAddress timeServerIP; // time.nist.gov NTP server address
@@ -40,7 +40,7 @@ WiFiUDP udp;
 // Note that for older NeoPixel strips you might need to change the third parameter--see the strandtest
 // example for more information on possible values.
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_RGB + NEO_KHZ800);
-void print_cara(Adafruit_NeoPixel *pixels ,uint8_t x, pixel_color color);
+void print_cara(Adafruit_NeoPixel *pixels ,uint8_t x, pixel_color color, char num_col);
 int delayval = 500; // delay for half a second
 
 void clear_pixel();
@@ -194,7 +194,7 @@ void print_time(unsigned long epoch, char intensity)
   pixels.clear();
   pixels.show();
 
-  struct pixel_color color = {};
+  struct pixel_color color = {intensity,intensity,intensity};
   int x=0;
   int hour = 0;
   int minute = 0;
@@ -205,34 +205,13 @@ void print_time(unsigned long epoch, char intensity)
   offset_x = 0;
   //print dizaine
   x=hour / 10;
-  for (int i=0+8*x;i<8+8*x;i++)
-  {
-     if((font[i] & 0x01<<7) >> 7 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(0+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-     if((font[i] & 0x40) >> 6 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(1+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-     if((font[i] & 0x20)>>5 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(2+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-     if((font[i] & 0x10)>>4 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(3+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-    //pixels.show();
-   }
+  print_cara(&pixels,x,color,4);
+
   offset_x = 5;
   x=hour % 10;
   Serial.print("hour =");
   Serial.println(x);
-  for (int i=0+8*x;i<8+8*x;i++)
-  {
-     if((font[i] & 0x01<<7) >> 7 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(0+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-     if((font[i] & 0x40) >> 6 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(1+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-     if((font[i] & 0x20)>>5 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(2+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-     if((font[i] & 0x10)>>4 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(3+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-  //pixels.show();
-  }
+  print_cara(&pixels,x,color,4);
   offset_x = 10;
 
   //print double point
@@ -244,34 +223,15 @@ void print_time(unsigned long epoch, char intensity)
   x=minute / 10;
   Serial.print("minutes =");
   Serial.println(x);
-  for (char i=0+x*8;i<8+x*8;i++)
-  {
-     if((font[i] & 0x01<<7) >> 7 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(0+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-     if((font[i] & 0x40) >> 6 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(1+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-     if((font[i] & 0x20)>>5 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(2+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-     if((font[i] & 0x10)>>4 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(3+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-    pixels.show();
-   }
+  print_cara(&pixels,x,color,4);
+
+
   offset_x = 17;
   x=minute % 10;
   Serial.print("minutes =");
   Serial.println(x);
 
-  for (int i=0+x*8;i<8+x*8;i++)
-  {
-     if((font[i] & 0x01<<7) >> 7 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(0+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-     if((font[i] & 0x40) >> 6 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(1+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-     if((font[i] & 0x20)>>5 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(2+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-     if((font[i] & 0x10)>>4 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(3+offset_x),(uint16_t)(i-8*x)}), pixels.Color(intensity,intensity,intensity));
-   }
+  print_cara(&pixels,x,color,4);
 
     offset_x = 24;
     Serial.printf("main: %s\n",weather_main_get());
@@ -279,36 +239,36 @@ void print_time(unsigned long epoch, char intensity)
     {
        x=13;
        color.red=20;color.green=20;color.blue=20;
-      print_cara(&pixels,x,color);
+      print_cara(&pixels,x,color,8);
     }
      if(strcmp(weather_main_get(),"Clear") == 0)
      {
         color.red=50;color.green=50;color.blue=0;
         x=11;
         if(hour < 21 && hour > 7)
-          print_cara(&pixels,11,color);//print sun
+          print_cara(&pixels,11,color,8);//print sun
         else
         {
           color.red=15;color.green=20;color.blue=20;
-          print_cara(&pixels,10,color);//print moon
+          print_cara(&pixels,10,color,8);//print moon
         }
      }
      if(strcmp(weather_main_get(),"Snow") == 0)
      {
         x=45;
         color.red=0;color.green=50;color.blue=50;
-        print_cara(&pixels,x,color);
+        print_cara(&pixels,x,color,8);
      }
      if(strcmp(weather_main_get(),"Rain") == 0)
      {
         x=44;
         color.red=0;color.green=38;color.blue=70;
-        print_cara(&pixels,x,color);
+        print_cara(&pixels,x,color,8);
      }
      if(strcmp(weather_main_get(),"Thunderstorm") == 0)
      {
         x=43;
-        print_cara(&pixels,x,color);
+        print_cara(&pixels,x,color,8);
      }
    pixels.show();
    //delay(500);
@@ -323,9 +283,10 @@ void print_weather(unsigned long epoch)
     uint8_t temperature =weather_temperature_get();
     uint8_t hour = (epoch  % 86400L) / 3600+2;
     uint8_t x = 0;
-    offset_x = 0;
+    offset_x = 3;
     struct pixel_color color = {};
     char intensity = 0;
+
     if (temperature > 20){
       color.red=51;color.green=20;color.blue=0;
     }
@@ -339,36 +300,20 @@ void print_weather(unsigned long epoch)
       color.red=0; color.green=10;color.blue=40;
     }
     x=temperature / 10;
-    for (int i=0+8*x;i<8+8*x;i++)
-    {
-     if((font[i] & 0x01<<7) >> 7 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(0+offset_x),(uint16_t)(i-8*x)}), pixels.Color(color.green,color.red,color.blue));
-     if((font[i] & 0x40) >> 6 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(1+offset_x),(uint16_t)(i-8*x)}), pixels.Color(color.green,color.red,color.blue));
-     if((font[i] & 0x20)>>5 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(2+offset_x),(uint16_t)(i-8*x)}), pixels.Color(color.green,color.red,color.blue));
-     if((font[i] & 0x10)>>4 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(3+offset_x),(uint16_t)(i-8*x)}), pixels.Color(color.green,color.red,color.blue));
-    }
-    offset_x = 5;
+
+     print_cara(&pixels,x,color,4);
+
+    offset_x = 8;
     x = temperature % 10;
-    for (int i=0+8*x;i<8+8*x;i++)
-    {
-     if((font[i] & 0x01<<7) >> 7 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(0+offset_x),(uint16_t)(i-8*x)}), pixels.Color(color.green,color.red,color.blue));
-     if((font[i] & 0x40) >> 6 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(1+offset_x),(uint16_t)(i-8*x)}), pixels.Color(color.green,color.red,color.blue));
-     if((font[i] & 0x20)>>5 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(2+offset_x),(uint16_t)(i-8*x)}), pixels.Color(color.green,color.red,color.blue));
-     if((font[i] & 0x10)>>4 == 1)
-        pixels.setPixelColor(get_map_num_led({(uint16_t)(3+offset_x),(uint16_t)(i-8*x)}), pixels.Color(color.green,color.red,color.blue));
-    }
-    offset_x = 9;
+
+     print_cara(&pixels,x,color,4);
+
+    offset_x = 12;
     //print °C
     x=12;
-    print_cara(&pixels,x,color);
+    print_cara(&pixels,x,color,8);
 
-    offset_x = 19;
+    offset_x = 23;
     Serial.printf("main: %s\n", weather_main_get());
     if(strcmp(weather_main_get(),"Clouds") == 0)
     {
@@ -376,7 +321,7 @@ void print_weather(unsigned long epoch)
        color.red=20;
        color.green=20;
        color.blue=20;
-      print_cara(&pixels,x,color);
+      print_cara(&pixels,x,color,8);
     }
      if(strcmp(weather_main_get(),"Clear") == 0)
      {
@@ -385,14 +330,14 @@ void print_weather(unsigned long epoch)
         color.blue=0;
         x=11;
         if(hour < 20 && hour > 7)
-          print_cara(&pixels,x,color);//print sun
+          print_cara(&pixels,x,color,8);//print sun
         else
         {
           x=10;
           color.red=15;
           color.green=20;
           color.blue=20;
-          print_cara(&pixels,x,color);//print moon
+          print_cara(&pixels,x,color,8);//print moon
         }
      }
      if(strcmp(weather_main_get(),"Snow") == 0)
@@ -401,7 +346,7 @@ void print_weather(unsigned long epoch)
         color.red=0;
         color.green=50;
         color.blue=50;
-        print_cara(&pixels,x,color);
+        print_cara(&pixels,x,color,8);
      }
      if(strcmp(weather_main_get(),"Rain") == 0)
      {
@@ -409,36 +354,36 @@ void print_weather(unsigned long epoch)
         color.green=38;
         color.blue=70;
         x=44;
-        print_cara(&pixels,x,color);
+        print_cara(&pixels,x,color,8);
      }
      if(strcmp(weather_main_get(),"Thunderstorm") == 0)
      {
         x=43;
-        print_cara(&pixels,x,color);
+        print_cara(&pixels,x,color,8);
      }
 
     pixels.show();
 }
 
-void print_cara(Adafruit_NeoPixel *pixels ,uint8_t x, pixel_color color)
+void print_cara(Adafruit_NeoPixel *pixels ,uint8_t x, pixel_color color, char num_col)
 {
   for (int i=0+8*x;i<8+8*x;i++)
   {
-    if((font[i] & 0x01<<7) >> 7 == 1)
+    if((font[i] & 0x01<<7) >> 7 == 1 && (num_col >= 1))
       pixels->setPixelColor(get_map_num_led({(uint16_t)(0+offset_x),(uint16_t)(i-8*x)}), pixels->Color(color.green,color.red,color.blue));
-    if((font[i] & 0x40) >> 6 == 1)
+    if((font[i] & 0x40) >> 6 == 1 && (num_col >= 2))
       pixels->setPixelColor(get_map_num_led({(uint16_t)(1+offset_x),(uint16_t)(i-8*x)}), pixels->Color(color.green,color.red,color.blue));
-    if((font[i] & 0x20)>>5 == 1)
+    if((font[i] & 0x20)>>5 == 1 && (num_col >= 3))
       pixels->setPixelColor(get_map_num_led({(uint16_t)(2+offset_x),(uint16_t)(i-8*x)}), pixels->Color(color.green,color.red,color.blue));
-    if((font[i] & 0x10)>>4 == 1)
+    if((font[i] & 0x10)>>4 == 1 && (num_col >= 4))
       pixels->setPixelColor(get_map_num_led({(uint16_t)(3+offset_x),(uint16_t)(i-8*x)}), pixels->Color(color.green,color.red,color.blue));
-    if((font[i] & 0x08) >> 3 == 1)
+    if((font[i] & 0x08) >> 3 == 1 && (num_col >= 5))
       pixels->setPixelColor(get_map_num_led({(uint16_t)(4+offset_x),(uint16_t)(i-8*x)}), pixels->Color(color.green,color.red,color.blue));
-    if((font[i] & 0x04) >> 2 == 1)
+    if((font[i] & 0x04) >> 2 == 1 && (num_col >= 6))
       pixels->setPixelColor(get_map_num_led({(uint16_t)(5+offset_x),(uint16_t)(i-8*x)}), pixels->Color(color.green,color.red,color.blue));
-    if((font[i] & 0x02)>>1 == 1)
+    if((font[i] & 0x02)>>1 == 1 && (num_col >= 7))
       pixels->setPixelColor(get_map_num_led({(uint16_t)(6+offset_x),(uint16_t)(i-8*x)}), pixels->Color(color.green,color.red,color.blue));
-    if((font[i] & 0x01)>>0 == 1)
+    if((font[i] & 0x01)>>0 == 1 && (num_col >= 8))
       pixels->setPixelColor(get_map_num_led({(uint16_t)(7+offset_x),(uint16_t)(i-8*x)}), pixels->Color(color.green,color.red,color.blue));
    }
 
@@ -472,7 +417,7 @@ unsigned long sendNTPpacket(IPAddress& address)
 
 void clear_pixel()
 {
-  for(int i=0;i<NUMPIXELS+1;i++){
+  for(int i=0;i<NUMPIXELS+2;i++){
     // pixels.Color takes RGB values, from 0,0,0 up to 255,255,255
     pixels.setPixelColor(i, pixels.Color(0,0,0)); // Moderately bright green color.
   }

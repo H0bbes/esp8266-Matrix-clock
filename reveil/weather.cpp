@@ -16,6 +16,7 @@ OpenWeatherMapCurrentData data;
 void get_weather()
 {
 
+
   Serial.println();
   Serial.println("\n\nNext Loop-Step: " + String(millis()) + ":");
 
